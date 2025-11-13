@@ -1,34 +1,45 @@
 "use client";
 import { useState } from 'react';
 import { Menu, X, ShoppingCart, Phone } from 'lucide-react';
-
+import Image from 'next/image';
+import PromoBannerSlider from './Offer';
+import Link from 'next/link';
 export default function HeaderBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+
   const navLinks = [
-    { name: 'Home', href: '/' },
+   
     { name: 'About', href: '/about' },
     { name: 'Products', href: '/products' },
-    { name: 'Buy Online', href: '/shop' },
+    { name: 'Combo', href: '/combo' },
     { name: 'Contact', href: '/contact' },
-    { name: 'Feedback', href: '/feedback' }
+    
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-orange-600 via-red-600 to-orange-700 shadow-lg">
+    <>
+    <PromoBannerSlider />
+    
+    <header className="sticky top-0 z-50 w-full bg-transparent shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo & Brand */}
           <div className="flex items-center space-x-3">
-            <div className="bg-white rounded-full p-2 shadow-md">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl"></span>
-              </div>
-            </div>
-            <div className="text-white">
+            <div className=" ">
+<Link href="/" className="w-40 h-15 overflow-hidden flex items-center justify-center">
+  <Image
+    src="/images/logo1.png"
+    alt="Logo"
+    width={60}
+    height={60}
+    className="object-cover w-full h-full"
+  />
+</Link>     </div>
+            {/* <div className="text-white">
               <h1 className="text-2xl font-bold tracking-tight">Deep Masala</h1>
               <p className="text-xs text-orange-100">Pure Taste. Real Tradition.</p>
-            </div>
+            </div> */}
           </div>
 
           {/* Desktop Navigation */}
@@ -101,5 +112,6 @@ export default function HeaderBar() {
         )}
       </div>
     </header>
+    </>
   );
 }
