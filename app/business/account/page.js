@@ -121,6 +121,7 @@ export default function LoginPage() {
               </div>
               <button
                 type="button"
+                onClick={() => router.push('/business/account/forgot-password')}  
                 className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
               >
                 Forgot password?

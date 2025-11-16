@@ -14,7 +14,7 @@ export default function HeaderBar() {
     { name: 'Products', href: '/products' },
     { name: 'Combo', href: '/combo' },
     { name: 'Contact', href: '/contact' },
-    { name: 'Business', href: '/business' },
+    { name: 'Business', href: '/business/account' },
     
   ];
 
