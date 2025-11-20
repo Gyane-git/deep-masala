@@ -67,7 +67,7 @@ export default function HeaderBar() {
                 </button>
               ) : (
                 <button
-                  onClick={() => router.push("/account")}
+                  onClick={() => router.push("/myaccount")}
                   className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-800 text-white font-medium hover:bg-gray-900 transition"
                 >
                   <UserCog size={18} /> My Account
@@ -112,7 +112,7 @@ export default function HeaderBar() {
                 <button
                   onClick={() => {
                     setIsMenuOpen(false);
-                    router.push("/account");
+                    router.push("/myaccount");
                   }}
                   className="w-full flex items-center gap-2 px-4 py-2 rounded-full bg-gray-800 text-white font-medium hover:bg-gray-900 transition"
                 >
