@@ -8,6 +8,7 @@ export default function AddCategoryPage() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null); // store file
   const [preview, setPreview] = useState(null); // for image preview
+  const [loading, setLoading] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -20,50 +21,60 @@ export default function AddCategoryPage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prepare category object
-    const newCategory = {
-      name,
-      slug,
-      description,
-      image, // this is the File object
-    };
+    if (!name) {
+      alert("Category name is required!");
+      return;
+    }
 
-    console.log("Category Submitted:", newCategory);
+    setLoading(true);
 
-    // TODO: Replace with API call (multipart/form-data)
-    // Example:
-    // const formData = new FormData();
-    // formData.append('name', name);
-    // formData.append('slug', slug);
-    // formData.append('description', description);
-    // formData.append('image', image);
-    // await fetch("/api/admin/categories", { method: "POST", body: formData });
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("slug", slug);
+      formData.append("description", description);
+      if (image) formData.append("image", image);
 
-    // Reset form
-    setName("");
-    setSlug("");
-    setDescription("");
-    setImage(null);
-    setPreview(null);
+      const res = await fetch("/api/categories", {
+        method: "POST",
+        body: formData,
+      });
 
-    alert("Category added successfully!");
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Category added successfully!");
+        // Reset form
+        setName("");
+        setSlug("");
+        setDescription("");
+        setImage(null);
+        setPreview(null);
+      } else {
+        alert("Error: " + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong!");
+    }
+
+    setLoading(false);
   };
 
   return (
-    <div className="w-full bg-white shadow-md rounded-lg p-6">
+    <div className="w-full bg-white shadow-md rounded-lg p-6 max-w-xl mx-auto">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">
         Add New Category
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-
         {/* Category Name */}
         <div>
           <label className="block text-gray-700 font-medium mb-2">
-            Category Name
+            Category Name <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -77,24 +88,19 @@ export default function AddCategoryPage() {
 
         {/* Slug */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">
-            Slug
-          </label>
+          <label className="block text-gray-700 font-medium mb-2">Slug</label>
           <input
             type="text"
             placeholder="e.g. spices, masala"
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
             className="w-full border rounded-lg px-4 py-2 text-black outline-none focus:ring-2 focus:ring-blue-500"
-            
           />
         </div>
 
         {/* Description */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">
-            Description
-          </label>
+          <label className="block text-gray-700 font-medium mb-2">Description</label>
           <textarea
             placeholder="Write a short description…"
             rows={4}
@@ -106,9 +112,7 @@ export default function AddCategoryPage() {
 
         {/* Image Upload */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">
-            Category Image
-          </label>
+          <label className="block text-gray-700 font-medium mb-2">Category Image</label>
           <input
             type="file"
             accept="image/*"
@@ -119,7 +123,7 @@ export default function AddCategoryPage() {
             <img
               src={preview}
               alt="Preview"
-              className="mt-3 h-40 w-40 text-black object-cover rounded-lg border"
+              className="mt-3 h-40 w-40 object-cover rounded-lg border"
             />
           )}
         </div>
@@ -127,9 +131,12 @@ export default function AddCategoryPage() {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-[#0072bc] text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          disabled={loading}
+          className={`w-full bg-[#0072bc] text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors ${
+            loading ? "opacity-60 cursor-not-allowed" : ""
+          }`}
         >
-          Add Category
+          {loading ? "Adding..." : "Add Category"}
         </button>
       </form>
     </div>

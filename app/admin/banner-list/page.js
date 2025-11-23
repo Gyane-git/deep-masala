@@ -13,7 +13,7 @@ export default function BannerList() {
   };
 
   const deleteBanner = async (id) => {
-    if (!confirm("Are you sure?")) return;
+    if (!confirm("Are you sure you want to delete this banner?")) return;
 
     const res = await fetch(`/api/banner/${id}`, {
       method: "DELETE",
@@ -22,11 +22,21 @@ export default function BannerList() {
     const data = await res.json();
 
     if (data.success) {
-      alert("Banner removed");
+      alert("Banner removed successfully");
       fetchBanners();
     } else {
-      alert("Failed to delete");
+      alert("Failed to delete banner");
     }
+  };
+
+  const handleEdit = (id) => {
+    // Add your edit logic here
+    console.log("Edit banner:", id);
+  };
+
+  const handleInfo = (id) => {
+    // Add your info/view logic here
+    console.log("View banner info:", id);
   };
 
   useEffect(() => {
@@ -34,31 +44,71 @@ export default function BannerList() {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Banner List</h1>
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">Banner Management</h1>
+        <p className="text-gray-600 mt-1">Manage your banner collection</p>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {banners.map((banner) => (
-          <div
-            key={banner.id}
-            className="rounded-xl border p-3 shadow-md bg-white"
-          >
-            <img
-              src={banner.image_path}
-              className="w-full h-40 object-cover rounded-lg"
-              alt={banner.banner_name}
-            />
-
-            <h2 className="mt-2 font-semibold">{banner.banner_name}</h2>
-
-            <button
-              onClick={() => deleteBanner(banner.id)}
-              className="mt-2 w-full bg-red-600 text-white py-1.5 rounded hover:bg-red-700"
-            >
-              Delete
-            </button>
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        {banners.length === 0 ? (
+          <div className="p-8 text-center text-gray-500">
+            No banners available
           </div>
-        ))}
+        ) : (
+          <div className="divide-y divide-gray-200">
+            {banners.map((banner) => (
+              <div
+                key={banner.id}
+                className="flex items-center p-4 hover:bg-gray-50 transition-colors"
+              >
+                {/* Banner Image */}
+                <div className="flex-shrink-0 w-32 h-20 mr-4">
+                  <img
+                    src={banner.image_path}
+                    alt={banner.banner_name}
+                    className="w-full h-full object-cover rounded-md border border-gray-200"
+                  />
+                </div>
+
+                {/* Banner Info */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg font-semibold text-gray-900 truncate">
+                    {banner.banner_name}
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    ID: {banner.id}
+                  </p>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center gap-2 ml-4">
+                  <button
+                    onClick={() => handleInfo(banner.id)}
+                    className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors"
+                    title="View Info"
+                  >
+                    Info
+                  </button>
+                  <button
+                    onClick={() => handleEdit(banner.id)}
+                    className="px-4 py-2 text-sm font-medium text-green-600 bg-green-50 rounded-md hover:bg-green-100 transition-colors"
+                    title="Edit Banner"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => deleteBanner(banner.id)}
+                    className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
+                    title="Delete Banner"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
