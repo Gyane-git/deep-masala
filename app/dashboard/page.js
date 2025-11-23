@@ -31,28 +31,28 @@ export default function HomePage() {
     {
       title: "BLENDED SPICES",
       description:
-        "Nothing can beat the delicious taste of traditional Indian spice blends! Everest's range of blended spices are hand-crafted & the ingredients are sourced from India's renowned spice lands, ensuring the taste, aroma, flavour & color remain uncompromised.",
+        "Nothing can beat the delicious taste of traditional Indian spice blends! Deep's range of blended spices are hand-crafted & the ingredients are sourced from India's renowned spice lands, ensuring the taste, aroma, flavour & color remain uncompromised.",
       image: "/images/blended-spices.png",
       imagePosition: "left",
     },
     {
       title: "PURE SPICES",
       description:
-        "Pure spices play an integral part in Indian cuisine irrespective of the zone, state, community or the cooking method and hence occupy a very special place of honor. We, at Everest, believe in offering spices that are rich & authentic. And nothing more speaks of this belief than our range of Pure Spices.",
+        "Pure spices play an integral part in Indian cuisine irrespective of the zone, state, community or the cooking method and hence occupy a very special place of honor. We, at Deep, believe in offering spices that are rich & authentic. And nothing more speaks of this belief than our range of Pure Spices.",
       image: "/images/pure-spices.png",
       imagePosition: "right",
     },
     {
       title: "ASAFOETIDA",
       description:
-        "Add some 'zing to tastes' to your dishes! Rich, strong and soothing Everest Hingraj Powder is made using spices of the highest quality sourced only from the best of farms. We have maintained the highest level of purity, freshness and authenticity in every piece, getting their aroma and flavour consistently right.",
+        "Add some 'zing to tastes' to your dishes! Rich, strong and soothing Deep Hingraj Powder is made using spices of the highest quality sourced only from the best of farms. We have maintained the highest level of purity, freshness and authenticity in every piece, getting their aroma and flavour consistently right.",
       image: "/images/asafoetida.png",
       imagePosition: "left",
     },
     {
       title: "EXOTIC RANGE",
       description:
-        "Pure, premium, and exotic, Everest's Kesar Milk Masala and Saffron are must-haves for all the traditional and mouth-watering shahi Indian feasts. Everest Saffron & Kesar Milk Masala have a subtle & earthy flavour & an unmistakable scent that makes it a special spice.",
+        "Pure, premium, and exotic, Deep's Kesar Milk Masala and Saffron are must-haves for all the traditional and mouth-watering shahi Indian feasts. Deep Saffron & Kesar Milk Masala have a subtle & earthy flavour & an unmistakable scent that makes it a special spice.",
       image: "/images/exotic-range.png",
       imagePosition: "right",
     },
@@ -156,7 +156,7 @@ export default function HomePage() {
               <h2 className="text-4xl font-bold text-gray-900 mb-6">About Us</h2>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 <span className="bg-red-600 text-white px-2 py-1 font-semibold">
-                  At Everest, spice bhejo
+                  At Deep, spice bhejo
                 </span>{" "}
                 has an ingredient... But an emotion! It evokes the joy of
                 festive feasts, the warmth of family recipes, and the love that
@@ -165,14 +165,14 @@ export default function HomePage() {
               </p>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 <span className="bg-red-600 text-white px-2 py-1 font-semibold">
-                  At Everest
+                  At Deep
                 </span>
                 , magic – created by global flavours, meet the new{" "}
                 <span className="bg-yellow-400 text-gray-900 px-2 py-1 font-semibold">
                   Tasteeto range
                 </span>
                 – crafted for quick, delicious everyday cooking, we are here to
-                make every dish effortlessly flavourful. Everest is not just
+                make every dish effortlessly flavourful. Deep is not just
                 about spices: its about seasoning lives with taste and
                 tradition.
               </p>
