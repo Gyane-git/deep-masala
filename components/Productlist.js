@@ -29,7 +29,7 @@ const ProductListingPage = () => {
       rating: 4.8,
       reviews: 1247,
       image:
-        "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=300&h=300&fit=crop",
+        "/images/product/Aloo-Sabji-Masala-01-1.png.webp",
       badge: "New",
     },
     {
@@ -45,7 +45,7 @@ const ProductListingPage = () => {
       rating: 4.7,
       reviews: 2156,
       image:
-        "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=300&h=300&fit=crop",
+        "/images/product/ambhar-masala.png.webp",
       badge: "Sale",
     },
     {
@@ -60,7 +60,7 @@ const ProductListingPage = () => {
       rating: 4.6,
       reviews: 3421,
       image:
-        "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=300&h=300&fit=crop",
+        "/images/product/Butter-Chicken-Mix-01.png.webp",
     },
     {
       id: 4,
@@ -74,7 +74,7 @@ const ProductListingPage = () => {
       rating: 4.4,
       reviews: 891,
       image:
-        "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=300&h=300&fit=crop",
+        "/images/product/chaat-masala.png.webp",
     },
 
     // Electronics - Samsung (2 products)
@@ -90,7 +90,7 @@ const ProductListingPage = () => {
       rating: 4.7,
       reviews: 1834,
       image:
-        "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=300&h=300&fit=crop",
+        "/images/product/chhole-masala.png.webp",
       badge: "Featured",
     },
     {
@@ -105,7 +105,7 @@ const ProductListingPage = () => {
       rating: 4.3,
       reviews: 756,
       image:
-        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&h=300&fit=crop",
+        "/images/product/Chicken-65-Kabab-Masala-02-FI.png.webp",
     },
 
     // Electronics - Laptops (3 products)
@@ -121,7 +121,7 @@ const ProductListingPage = () => {
       rating: 4.9,
       reviews: 567,
       image:
-        "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&h=300&fit=crop",
+        "/images/product/Chicken-Biryani-Masala-02-FI.png.webp",
       badge: "Best Seller",
     },
     {
@@ -136,7 +136,7 @@ const ProductListingPage = () => {
       rating: 4.5,
       reviews: 1023,
       image:
-        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300&h=300&fit=crop",
+        "/images/product/Chicken-Biryani-Mix-01.png.webp",
     },
     {
       id: 9,
@@ -151,7 +151,7 @@ const ProductListingPage = () => {
       rating: 4.4,
       reviews: 634,
       image:
-        "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=300&h=300&fit=crop",
+        "/images/product/Chicken-Curry-Mix-01.png.webp",
       badge: "Sale",
     },
 
@@ -167,7 +167,7 @@ const ProductListingPage = () => {
       rating: 4.8,
       reviews: 2341,
       image:
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
+        "/images/product/chiken-masal.png.webp",
       badge: "Top Rated",
     },
 
@@ -183,7 +183,7 @@ const ProductListingPage = () => {
       rating: 4.3,
       reviews: 234,
       image:
-        "https://images.unsplash.com/photo-1621072156002-e2fccdc0b176?w=300&h=300&fit=crop",
+        "/images/product/Chilli-Flakes-01-1.png.webp",
     },
     {
       id: 12,
@@ -198,7 +198,7 @@ const ProductListingPage = () => {
       rating: 4.2,
       reviews: 456,
       image:
-        "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=300&h=300&fit=crop",
+        "/images/product/cumin-front.png.webp",
       badge: "Sale",
     },
     {
@@ -212,7 +212,7 @@ const ProductListingPage = () => {
       rating: 4.6,
       reviews: 178,
       image:
-        "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=300&h=300&fit=crop",
+        "/images/product/Desi-Chicken-Masala-7g-01.png.webp",
     },
 
     // Fashion - Women (2 products)
@@ -227,7 +227,7 @@ const ProductListingPage = () => {
       rating: 4.7,
       reviews: 123,
       image:
-        "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300&h=300&fit=crop",
+        "/images/product/Desi-Meat-Masala-01.png.webp",
     },
     {
       id: 15,
@@ -241,7 +241,7 @@ const ProductListingPage = () => {
       rating: 4.4,
       reviews: 267,
       image:
-        "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&h=300&fit=crop",
+        "/images/product/dry-ginger-front.png (1).webp",
       badge: "Sale",
     },
 
@@ -258,7 +258,7 @@ const ProductListingPage = () => {
       rating: 4.5,
       reviews: 89,
       image:
-        "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop",
+        "/images/product/dry-mango-front.png.webp",
     },
     {
       id: 17,
@@ -272,7 +272,7 @@ const ProductListingPage = () => {
       rating: 4.8,
       reviews: 156,
       image:
-        "https://images.unsplash.com/photo-1549497538-303791108f95?w=300&h=300&fit=crop",
+        "/images/product/Frame-1-1.png.webp",
     },
     {
       id: 18,
@@ -287,7 +287,7 @@ const ProductListingPage = () => {
       rating: 4.3,
       reviews: 341,
       image:
-        "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=300&h=300&fit=crop",
+        "/images/product/Frame-2.png.webp",
       badge: "Sale",
     },
     {
@@ -302,7 +302,7 @@ const ProductListingPage = () => {
       rating: 4.6,
       reviews: 78,
       image:
-        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=300&fit=crop",
+        "/images/product/Frame-3.png.webp",
     },
 
     // Kids - Toys (2 products)
@@ -317,7 +317,7 @@ const ProductListingPage = () => {
       rating: 4.9,
       reviews: 432,
       image:
-        "https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=300&h=300&fit=crop",
+        "/images/product/Frame-4.png.webp",
       badge: "Popular",
     },
     {
@@ -331,7 +331,7 @@ const ProductListingPage = () => {
       rating: 4.4,
       reviews: 234,
       image:
-        "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=300&h=300&fit=crop",
+        "/images/product/front-1-2.png.webp",
     },
 
     // Books (1 product - category only)
@@ -345,7 +345,41 @@ const ProductListingPage = () => {
       rating: 4.7,
       reviews: 567,
       image:
-        "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300&h=300&fit=crop",
+        "/images/product/front-2-1.png.webp",
+    },
+    {
+      id: 23,
+      category: "Books",
+      name: "The Art of Programming",
+      description:
+        "Comprehensive guide to modern programming techniques and best practices",
+      price: 49,
+      rating: 4.7,
+      reviews: 567,
+      image:
+        "/images/product/front-3.png.webp",
+    },{
+      id: 24,
+      category: "Books",
+      name: "The Art of Programming",
+      description:
+        "Comprehensive guide to modern programming techniques and best practices",
+      price: 49,
+      rating: 4.7,
+      reviews: 567,
+      image:
+        "/images/product/front-4.png.webp",
+    },{
+      id: 25,
+      category: "Books",
+      name: "The Art of Programming",
+      description:
+        "Comprehensive guide to modern programming techniques and best practices",
+      price: 49,
+      rating: 4.7,
+      reviews: 567,
+      image:
+        "/images/product/front-5.png.webp",
     },
   ];
 
@@ -514,10 +548,7 @@ const ProductListingPage = () => {
                   </div>
                 )}
 
-                {/* Wishlist Button */}
-                <button className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors">
-                  <Heart className="h-4 w-4 text-gray-600" />
-                </button>
+                
               </div>
 
               {/* Product Info */}
@@ -564,10 +595,7 @@ const ProductListingPage = () => {
                   </div>
                 </div>
                 <div>
-                  <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                    <ShoppingCart className="h-4 w-4" />
-                    <span className="text-sm font-medium">Add to Cart</span>
-                  </button>
+                  
                 </div>
               </div>
             </div>

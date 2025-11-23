@@ -32,42 +32,42 @@ export default function HomePage() {
       title: "BLENDED SPICES",
       description:
         "Nothing can beat the delicious taste of traditional Indian spice blends! Deep's range of blended spices are hand-crafted & the ingredients are sourced from India's renowned spice lands, ensuring the taste, aroma, flavour & color remain uncompromised.",
-      image: "/images/blended-spices.png",
+      image: "/images/product/Aloo-Sabji-Masala-01-1.png.webp",
       imagePosition: "left",
     },
     {
       title: "PURE SPICES",
       description:
         "Pure spices play an integral part in Indian cuisine irrespective of the zone, state, community or the cooking method and hence occupy a very special place of honor. We, at Deep, believe in offering spices that are rich & authentic. And nothing more speaks of this belief than our range of Pure Spices.",
-      image: "/images/pure-spices.png",
+      image: "/images/product/Frame-3.png.webp",
       imagePosition: "right",
     },
     {
       title: "ASAFOETIDA",
       description:
         "Add some 'zing to tastes' to your dishes! Rich, strong and soothing Deep Hingraj Powder is made using spices of the highest quality sourced only from the best of farms. We have maintained the highest level of purity, freshness and authenticity in every piece, getting their aroma and flavour consistently right.",
-      image: "/images/asafoetida.png",
+      image: "/images/product/Frame-4.png.webp",
       imagePosition: "left",
     },
     {
       title: "EXOTIC RANGE",
       description:
         "Pure, premium, and exotic, Deep's Kesar Milk Masala and Saffron are must-haves for all the traditional and mouth-watering shahi Indian feasts. Deep Saffron & Kesar Milk Masala have a subtle & earthy flavour & an unmistakable scent that makes it a special spice.",
-      image: "/images/exotic-range.png",
+      image: "/images/product/front-3.png.webp",
       imagePosition: "right",
     },
     {
       title: "PASTE",
       description:
         "Ginger Garlic paste that tastes fresh & delicious just like the homemade one. Made using finest of the gingers and garlics, this blended delight is a must-have for food preparation.",
-      image: "/images/paste.png",
+      image: "/images/product/front-4.png.webp",
       imagePosition: "left",
     },
     {
       title: "TASTEETO",
       description:
         "Introducing Tasteeto, a range of herbs and seasonings to infuse your meals with lip-smacking flavour and archaroma tastic! Pick your cuisine, grab a bottle of Tasteeto, and let the feasting begin!",
-      image: "/images/tasteeto.png",
+      image: "/images/product/Chilli-Flakes-01-1.png.webp",
       imagePosition: "right",
     },
   ];
@@ -137,7 +137,7 @@ export default function HomePage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="relative w-full h-48 md:h-64">
                 <Image
-                  src="/images/about1.jpg"
+                  src="/images/product/Raita-Dahivada-Masala-01.png.webp"
                   alt="About image 1"
                   fill
                   className="object-cover rounded-lg shadow-md"
@@ -145,7 +145,7 @@ export default function HomePage() {
               </div>
               <div className="relative w-full h-48 md:h-64">
                 <Image
-                  src="/images/about2.jpg"
+                  src="/images/product/sabji-masala.png.webp"
                   alt="About image 2"
                   fill
                   className="object-cover rounded-lg shadow-md"
