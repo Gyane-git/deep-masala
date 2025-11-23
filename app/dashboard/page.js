@@ -3,25 +3,36 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-//import HeaderBar from "@/components/HeaderBar"; // import the header
-
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [slides, setSlides] = useState([]);
 
-  const slides = [
-    "/images/slide1.png",
-    "/images/slide2.png",
-    "/images/slide3.png",
-  ];
+  // Fetch banners from API
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const res = await fetch("http://localhost:3001/api/banner");
+        const data = await res.json();
+        if (data.success && data.banners.length > 0) {
+          const bannerImages = data.banners.map((banner) => banner.image_path);
+          setSlides(bannerImages);
+        }
+      } catch (err) {
+        console.error("Failed to fetch banners:", err);
+      }
+    };
+    fetchBanners();
+  }, []);
 
   // Auto-slide functionality
   useEffect(() => {
+    if (slides.length === 0) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [slides]);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
   const prevSlide = () =>
@@ -74,9 +85,6 @@ export default function HomePage() {
 
   return (
     <div className="bg-white">
-      {/* Header */}
-      {/* <HeaderBar /> */}
-
       {/* Hero Slider Section */}
       <section className="relative h-screen w-full overflow-hidden">
         {slides.map((slide, index) => (
@@ -90,8 +98,8 @@ export default function HomePage() {
             <Image
               src={slide}
               alt={`Slide ${index + 1}`}
-              className="object-cover"
               fill
+              className="object-cover"
               priority={index === 0}
             />
           </div>
