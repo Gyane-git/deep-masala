@@ -1,0 +1,6 @@
+### Banner
+GET http://localhost:3000/api/banner
+
+### Categories
+GET http://localhost:3000/api/categories
+
