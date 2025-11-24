@@ -40,35 +40,38 @@ const SideHeaderBar = () => {
     {
       icon: Package,
       label: "Products",
-      path: "/admin/products",
+      path: "#",
       expandable: true,
       children: [
         { name: "View All", path: "/admin/products" },
         { name: "Add New", path: "/admin/products/add" },
       ],
     },
-
     {
       icon: FolderTree,
       label: "Categories",
-      path: "/admin/categories",
+      path: "#",
       expandable: true,
       children: [
-        { name: "View All", path: "/admin/categories" },
+        { name: "View All", path: "/admin/categories-list" },
         { name: "Add New", path: "/admin/add-categories" },
       ],
     },
 
     {
       icon: Flag,
-      label: "Brands",
-      path: "/admin/brands",
+      label: "Banners",
+      path: "#",
       expandable: true,
       children: [
-        { name: "View All", path: "/admin/brands" },
-        { name: "Add New", path: "/admin/brands/add" },
+        { name: "View All", path: "/admin/banner-list" },
+        { name: "Add New", path: "/admin/add-banner" },
       ],
     },
+
+    
+
+    
 
     {
       icon: Tag,
@@ -84,27 +87,18 @@ const SideHeaderBar = () => {
       expandable: true,
     },
 
-    {
-      icon: Stethoscope,
-      label: "Manage Clinic Setup",
-      path: "/admin/clinic",
-      expandable: true,
-    },
+    
 
     { icon: Users, label: "Customers", path: "/admin/customers" },
     { icon: Star, label: "Reviews & Ratings", path: "/admin/reviews" },
     { icon: MessageSquare, label: "Inquiries", path: "/admin/inquiries" },
     { icon: FileText, label: "Grievances", path: "/admin/grievances" },
-    {
-      icon: FileText,
-      label: "Newsletter Subscribers",
-      path: "/admin/newsletter",
-    },
+    
 
     {
       icon: UserCog,
       label: "System Users",
-      path: "/admin/users",
+      path: "#",
       expandable: true,
       children: [
         { name: "View All", path: "/admin/users" },
@@ -120,7 +114,7 @@ const SideHeaderBar = () => {
     {
       icon: Shield,
       label: "Compliance & Legitimacy",
-      path: "/admin/compliance",
+      path: "#",
       expandable: true,
       children: [
         { name: "Policies", path: "/admin/compliance/policies" },
@@ -181,18 +175,8 @@ const SideHeaderBar = () => {
         ))}
       </div>
 
-      {/* User Profile */}
-      <div className="p-4 border-t border-gray-200">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-orange-400 rounded-full flex items-center justify-center">
-            <span className="text-white text-sm font-medium">G</span>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-gray-800">Gyanendra</p>
-            <p className="text-xs text-gray-500">Admin</p>
-          </div>
-        </div>
-      </div>
+      
+      
     </div>
   );
 };
