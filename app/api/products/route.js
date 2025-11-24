@@ -98,12 +98,3 @@ export async function POST(req) {
   }
 }
 
-export async function GET(req) {
-  try {
-    const conn = await db();
-    const [rows] = await conn.execute("SELECT * FROM products");
-    return NextResponse.json({ success: true, products: rows }, { status: 200 });
-  } catch (err) {
-    return NextResponse.json({ success: false, message: "Error fetching products", error: err.message }, { status: 500 });
-  }
-}
