@@ -28,7 +28,7 @@ export default function CategoriesListPage() {
   }, []);
 
   // Delete category
-  const handleDelete = async (id) => {
+  async function handleDelete(id) {
     if (!confirm("Are you sure you want to delete this category?")) return;
     try {
       const res = await fetch(`/api/categories?id=${id}`, { method: "DELETE" });
@@ -43,13 +43,14 @@ export default function CategoriesListPage() {
       console.error(err);
       alert("Something went wrong while deleting!");
     }
-  };
+  }
 
   if (loading) return <p className="text-center mt-10">Loading categories...</p>;
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
-      <h1 className="text-2xl text-gray-800 font-semibold mb-6">Categories List</h1>
+    <div className="p-6">
+      <div className="bg-white shadow-md rounded-lg p-6">
+        <h1 className="text-2xl text-gray-800 font-semibold mb-6">Categories List</h1>
 
       <div className="overflow-x-auto">
         <table className="min-w-full border text-black border-gray-200 rounded-lg">
@@ -115,6 +116,8 @@ export default function CategoriesListPage() {
             )}
           </tbody>
         </table>
+
+      </div>
       </div>
     </div>
   );

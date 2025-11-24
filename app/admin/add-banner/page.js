@@ -38,8 +38,13 @@ export default function AddBannerPage() {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-xl shadow">
-      <h1 className="text-2xl  text-black font-bold mb-4">Add Banner</h1>
+    // <div className="max-w-lg mx-auto p-6 bg-white rounded-xl shadow">
+    //   <h1 className="text-2xl  text-black font-bold mb-4">Add Banner</h1>
+
+      <div className="p-6">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-xl shadow p-6">
+          <h1 className="text-2xl text-black font-bold mb-4">Add Banner</h1>
 
       {msg && <p className="text-green-600 text-center">{msg}</p>}
 
@@ -75,6 +80,8 @@ export default function AddBannerPage() {
           {loading ? "Uploading..." : "Add Banner"}
         </button>
       </form>
+        </div>
+      </div>
     </div>
   );
 }

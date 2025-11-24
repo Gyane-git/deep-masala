@@ -32,7 +32,7 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="flex-1 bg-gray-50 overflow-auto">
+    <div className="w-full bg-gray-50">
 
 
       {/* Main Content */}

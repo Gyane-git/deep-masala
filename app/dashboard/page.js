@@ -12,7 +12,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchBanners = async () => {
       try {
-        const res = await fetch("http://localhost:3001/api/banner");
+        const res = await fetch("/api/banner");
         const data = await res.json();
         if (data.success && data.banners.length > 0) {
           const bannerImages = data.banners.map((banner) => banner.image_path);

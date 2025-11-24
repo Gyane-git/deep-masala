@@ -130,9 +130,9 @@ const SideHeaderBar = () => {
   ];
 
   return (
-    <div className="w-64 bg-white h-screen border-r border-gray-200 flex flex-col">
+    <div className="w-64 bg-white h-full border-r border-gray-200 flex flex-col overflow-hidden">
       {/* Menu Items */}
-      <div className="flex-1 overflow-y-auto py-4">
+      <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
         {menuItems.map((item, index) => (
           <div key={index}>
             {/* Main Button */}
