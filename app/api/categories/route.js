@@ -1,5 +1,6 @@
 import mysql from "mysql2/promise";
 
+
 // MySQL connection
 async function db() {
   return await mysql.createConnection({

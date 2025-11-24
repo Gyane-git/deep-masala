@@ -43,8 +43,8 @@ const SideHeaderBar = () => {
       path: "#",
       expandable: true,
       children: [
-        { name: "View All", path: "/admin/products" },
-        { name: "Add New", path: "/admin/products/add" },
+        { name: "View All", path: "/admin/product-list" },
+        { name: "Add New", path: "/admin/add-product" },
       ],
     },
     {
