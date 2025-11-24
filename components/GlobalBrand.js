@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/autoplay";
 import { Autoplay } from "swiper/modules";
+import Image from "next/image";
 
 export default function CategoriesSlider() {
   const [categories, setCategories] = useState([]);
@@ -49,9 +50,11 @@ export default function CategoriesSlider() {
           <SwiperSlide key={cat.id}>
             <div className="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition bg-white">
               {cat.image ? (
-                <img
+                <Image
                   src={cat.image} // e.g., "/categories/abc.png"
                   alt={cat.name}
+                  width={400}
+                  height={256}
                   className="w-full h-64 object-cover rounded-t-lg"
                 />
               ) : (

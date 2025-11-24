@@ -1,6 +1,8 @@
 import mysql from "mysql2/promise";
 
 
+
+
 // MySQL connection
 async function db() {
   return await mysql.createConnection({
@@ -10,6 +12,7 @@ async function db() {
     database: "deepmasala",
   });
 }
+
 
 export async function GET(req) {
   try {
@@ -41,7 +44,9 @@ export async function POST(req) {
     if (file && file.size > 0) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const pathModule = require("path");
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const fs = require("fs");
       const uploadDir = pathModule.join(process.cwd(), "public/upload/categories");
 
@@ -86,7 +91,9 @@ export async function PUT(req) {
     if (file && file.size > 0) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const pathModule = require("path");
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const fs = require("fs");
       const uploadDir = pathModule.join(process.cwd(), "public/upload/categories");
 

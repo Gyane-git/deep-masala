@@ -1,10 +1,11 @@
 "use client"
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
  
 
-import { Star, ShoppingCart, Heart, Filter, Grid, List } from "lucide-react";
+import { Star, Grid, List } from "lucide-react";
 
 
 const ProductListingPage = () => {
@@ -516,13 +517,15 @@ const ProductListingPage = () => {
               {/* Product Image */}
               <div
                 className={`relative ${
-                  viewMode === "list" ? "w-48 flex-shrink-0" : "aspect-square"
+                  viewMode === "list" ? "w-48 shrink-0" : "aspect-square"
                 }`}
               >
-                <img
+                <Image
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  width={400}
+                  height={400}
+                  
                 />
 
                 {/* Badge */}

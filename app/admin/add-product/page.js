@@ -3,13 +3,15 @@
 import { useState } from "react";
 import { useEffect } from "react";
 
-import { Upload, X, Plus, Save, RotateCcw } from "lucide-react";
+import { Upload,   Save, RotateCcw } from "lucide-react";
 
 export default function ProductUploadPage() {
   // Generate unique product code
   const generateProductCode = () => {
     const prefix = "PRD";
+    // eslint-disable-next-line react-hooks/purity
     const timestamp = Date.now().toString().slice(-8);
+    // eslint-disable-next-line react-hooks/purity
     const random = Math.floor(Math.random() * 1000)
       .toString()
       .padStart(3, "0");

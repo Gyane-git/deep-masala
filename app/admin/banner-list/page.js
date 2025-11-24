@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function BannerList() {
   const [banners, setBanners] = useState([]);
@@ -40,6 +41,7 @@ export default function BannerList() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchBanners();
   }, []);
 
@@ -63,10 +65,12 @@ export default function BannerList() {
                 className="flex items-center p-4 hover:bg-gray-50 transition-colors"
               >
                 {/* Banner Image */}
-                <div className="flex-shrink-0 w-32 h-20 mr-4">
-                  <img
+                <div className="shrink-0 w-32 h-20 mr-4">
+                  <Image
                     src={banner.image_path}
                     alt={banner.banner_name}
+                    width={128}
+                    height={80}
                     className="w-full h-full object-cover rounded-md border border-gray-200"
                   />
                 </div>

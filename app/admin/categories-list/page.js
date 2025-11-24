@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function CategoriesListPage() {
   const [categories, setCategories] = useState([]);
@@ -24,6 +25,7 @@ export default function CategoriesListPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchCategories();
   }, []);
 
@@ -81,7 +83,7 @@ export default function CategoriesListPage() {
                   <td className="px-4 py-2 border-b">{cat.description}</td>
                   <td className="px-4 py-2 border-b">
                     {cat.image ? (
-                      <img
+                      <Image
                         src={cat.image}
                         alt={cat.name}
                         className="w-20 h-20 object-cover rounded"

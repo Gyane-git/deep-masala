@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Plus, Edit, Info, Trash2, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Plus, Edit, Info, Trash2,  ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ProductListPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -245,7 +246,7 @@ export default function ProductListPage() {
                   className="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-gray-50 transition-colors items-center"
                 >
                   <div className="col-span-1">
-                    <img
+                    <Image
                       src={product.image}
                       alt={product.name}
                       className="w-12 h-12 rounded-lg object-cover border border-gray-200"
@@ -378,7 +379,7 @@ export default function ProductListPage() {
             </div>
             <div className="p-6">
               <div className="flex items-start gap-6 mb-6">
-                <img
+                <Image
                   src={selectedProduct.image}
                   alt={selectedProduct.name}
                   className="w-32 h-32 rounded-lg object-cover border border-gray-200"

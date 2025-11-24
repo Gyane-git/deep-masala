@@ -10,7 +10,7 @@ import {
   Flag,
   Tag,
   ShoppingCart,
-  Stethoscope,
+  
   Users,
   Star,
   MessageSquare,
