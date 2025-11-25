@@ -70,9 +70,11 @@ const PromoBannerSlider = () => {
         <div className="flex items-center justify-center gap-3 flex-1">
           <div className="shrink-0">{slides[currentSlide].icon}</div>
 
-          <p className="text-sm md:text-base font-medium text-center">
-            {slides[currentSlide].text}
-          </p>
+          <p className="text-base md:text-lg font-bold text-center">
+  {slides[currentSlide].text}
+</p>
+
+
         </div>
 
         {/* Right Navigation + Close */}
