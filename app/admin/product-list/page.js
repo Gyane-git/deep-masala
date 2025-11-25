@@ -246,10 +246,12 @@ export default function ProductListPage() {
                   className="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-gray-50 transition-colors items-center"
                 >
                   <div className="col-span-1">
-                    <Image
+                    <img
                       src={product.image}
                       alt={product.name}
-                      className="w-12 h-12 rounded-lg object-cover border border-gray-200"
+                      width={48}
+                      height={48}
+                      //className="w-12 h-12 rounded-lg object-cover border border-gray-200"
                     />
                   </div>
                   <div className="col-span-2">

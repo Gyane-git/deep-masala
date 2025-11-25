@@ -1,100 +1,153 @@
-import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import formidable from "formidable";
+import { writeFile } from "fs/promises";
 import fs from "fs";
 import path from "path";
+import mysql from "mysql2/promise";
 
-// Disable default body parser
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+/**
+ * Note: you may replace this db() with an env-driven connection pool.
+ * This matches the function you provided.
+ */
+async function db() {
+  return await mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "deepmasala",
+  });
+}
+
+function sanitizeFilename(name) {
+  return name.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "");
+}
 
 export async function POST(req) {
   try {
-    const form = formidable({ multiples: true });
+    const formData = await req.formData();
 
-    const data = await new Promise((resolve, reject) => {
-      form.parse(req, (err, fields, files) => {
-        if (err) reject(err);
-        else resolve({ fields, files });
-      });
-    });
+    // Read text fields
+    const productCode = formData.get("productCode") || null;
+    const productName = formData.get("productName") || null;
+    const category = formData.get("category") || null; // id
+    const brand = formData.get("brand") || null;
+    const deliveryTargetDays = formData.get("deliveryTargetDays") || null;
 
-    const { fields, files } = data;
+    // boolean flags: may come as "on"/"true" or actual booleans; handle both
+    const weeklyProduct = formData.get("weeklyProduct") ? 1 : 0;
+    const flashSaleProduct = formData.get("flashSaleProduct") ? 1 : 0;
+    const todayDeals = formData.get("todayDeals") ? 1 : 0;
+    const specialProduct = formData.get("specialProduct") ? 1 : 0;
 
-    // File handling
-    const uploadDir = path.join(process.cwd(), "public", "upload");
-    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+    const actualPrice = formData.get("actualPrice") || null;
+    const sellingPrice = formData.get("sellingPrice") || null;
+    const availableQuantity = formData.get("availableQuantity") || null;
+    const stockQuantity = formData.get("stockQuantity") || null;
 
-    // Move main image
-    let mainImagePath = null;
-    if (files.mainImage) {
-      const file = files.mainImage[0] || files.mainImage;
-      const mainImageName = `${Date.now()}-${file.originalFilename}`;
-      const mainImageDest = path.join(uploadDir, "product-image", mainImageName);
+    const productDescription = formData.get("productDescription") || null;
+    const keySpecifications = formData.get("keySpecifications") || null;
+    const packaging = formData.get("packaging") || null;
+    const warranty = formData.get("warranty") || null;
 
-      fs.mkdirSync(path.dirname(mainImageDest), { recursive: true });
-      fs.renameSync(file.filepath, mainImageDest);
+    // File fields
+    const productCatalogFile = formData.get("productCatalog");
+    const mainImageFile = formData.get("mainImage");
 
-      mainImagePath = `/upload/product-image/${mainImageName}`;
+    // Prepare directories
+    const productsDir = path.join(process.cwd(), "public/upload/products");
+    const catalogsDir = path.join(process.cwd(), "public/upload/catalogs");
+
+    if (!fs.existsSync(productsDir)) {
+      fs.mkdirSync(productsDir, { recursive: true });
+    }
+    if (!fs.existsSync(catalogsDir)) {
+      fs.mkdirSync(catalogsDir, { recursive: true });
     }
 
-    // Move catalog
+    // Helper to save file and return public path
+    const saveFile = async (file, destDir) => {
+      if (!file || typeof file === "string") return null;
+      const filenameRaw = file.name || `file-${Date.now()}`;
+      const safeName = Date.now() + "-" + sanitizeFilename(filenameRaw);
+      const filePath = path.join(destDir, safeName);
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      await writeFile(filePath, buffer);
+      // return path usable in <img src="..."> or storing in DB
+      return `/upload/${path.basename(destDir)}/${safeName}`;
+    };
+
+    // Save files (if present)
     let productCatalogPath = null;
-    if (files.productCatalog) {
-      const file = files.productCatalog[0] || files.productCatalog;
-      const catalogName = `${Date.now()}-${file.originalFilename}`;
-      const catalogDest = path.join(uploadDir, "product-catalog", catalogName);
+    let mainImagePath = null;
 
-      fs.mkdirSync(path.dirname(catalogDest), { recursive: true });
-      fs.renameSync(file.filepath, catalogDest);
-
-      productCatalogPath = `/upload/product-catalog/${catalogName}`;
+    if (productCatalogFile && productCatalogFile.size) {
+      // Optionally validate type/size here
+      productCatalogPath = await saveFile(productCatalogFile, catalogsDir);
     }
 
-    // Prepare DB insert
-    const conn = await db();
-    const query = `
+    if (mainImageFile && mainImageFile.size) {
+      // Optionally validate type/size here
+      mainImagePath = await saveFile(mainImageFile, productsDir);
+    }
+
+    // Insert into DB
+    const connection = await db();
+
+    const insertSQL = `
       INSERT INTO products
-      (
-        product_code, product_name, category_id, brand_id, delivery_target_days,
-        weekly_product, flash_sale_product, today_deals, special_product,
-        actual_price, selling_price, available_quantity, stock_quantity,
-        product_description, key_specifications, packaging, warranty,
-        main_image, product_catalog
-      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+      (product_code, product_name, category_id, brand, delivery_target_days,
+       weekly_product, flash_sale_product, today_deals, special_product,
+       actual_price, selling_price, available_quantity, stock_quantity,
+       product_description, key_specifications, packaging, warranty,
+       product_catalog, main_image)
+      VALUES (?, ?, ?, ?, ?,
+              ?, ?, ?, ?,
+              ?, ?, ?, ?,
+              ?, ?, ?, ?,
+              ?, ?)
     `;
 
     const params = [
-      fields.productCode,
-      fields.productName,
-      fields.category || null,
-      null, // brand null
-      fields.deliveryTargetDays || 0,
-      fields.weeklyProduct === "true" ? 1 : 0,
-      fields.flashSaleProduct === "true" ? 1 : 0,
-      fields.todayDeals === "true" ? 1 : 0,
-      fields.specialProduct === "true" ? 1 : 0,
-      fields.actualPrice || 0,
-      fields.sellingPrice || 0,
-      fields.availableQuantity || 0,
-      fields.stockQuantity || 0,
-      fields.productDescription || "",
-      fields.keySpecifications || "",
-      fields.packaging || "",
-      fields.warranty || "",
-      mainImagePath,
+      productCode,
+      productName,
+      category|| null,
+      brand,
+      deliveryTargetDays || null,
+      weeklyProduct,
+      flashSaleProduct,
+      todayDeals,
+      specialProduct,
+      actualPrice || null,
+      sellingPrice || null,
+      availableQuantity || null,
+      stockQuantity || null,
+      productDescription,
+      keySpecifications,
+      packaging,
+      warranty,
       productCatalogPath,
+      mainImagePath,
     ];
 
-    await conn.execute(query, params);
+    const [result] = await connection.execute(insertSQL, params);
 
-    return NextResponse.json({ message: "Product saved with files!" }, { status: 200 });
+    // optional: you may want to close connection: connection.end()
+    await connection.end();
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: "Product saved successfully",
+        productId: result.insertId,
+        mainImage: mainImagePath,
+        productCatalog: productCatalogPath,
+      }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({ message: "Error uploading product", error: err.message }, { status: 500 });
+    console.error("POST /api/products error:", err);
+    return new Response(
+      JSON.stringify({ success: false, message: "Server error", error: err.message }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
 }
-
