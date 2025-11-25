@@ -27,7 +27,8 @@ export async function POST(req) {
     // Read text fields
     const productCode = formData.get("productCode") || null;
     const productName = formData.get("productName") || null;
-    const category = formData.get("category") || null; // id
+    const categories = formData.get("categories") || null; // id
+    const category_id = formData.get("category_id") || null;
     const brand = formData.get("brand") || null;
     const deliveryTargetDays = formData.get("deliveryTargetDays") || null;
 
@@ -94,12 +95,12 @@ export async function POST(req) {
 
     const insertSQL = `
       INSERT INTO products
-      (product_code, product_name, category_id, brand, delivery_target_days,
+      (product_code, product_name, categories, category_id, brand, delivery_target_days,
        weekly_product, flash_sale_product, today_deals, special_product,
        actual_price, selling_price, available_quantity, stock_quantity,
        product_description, key_specifications, packaging, warranty,
        product_catalog, main_image)
-      VALUES (?, ?, ?, ?, ?,
+      VALUES (?, ?, ?, ?, ?, ?,
               ?, ?, ?, ?,
               ?, ?, ?, ?,
               ?, ?, ?, ?,
@@ -109,7 +110,8 @@ export async function POST(req) {
     const params = [
       productCode,
       productName,
-      category|| null,
+      categories,
+      category_id,
       brand,
       deliveryTargetDays || null,
       weeklyProduct,
@@ -151,3 +153,21 @@ export async function POST(req) {
     );
   }
 }
+
+
+// inside app/api/products/route.js add:
+export async function GET() {
+  try {
+    const connection = await db();
+    const [rows] = await connection.execute(
+      `SELECT id, product_code, product_name, categories, category_id, brand,
+              actual_price, selling_price, available_quantity, main_image, created_at
+       FROM products ORDER BY id DESC`
+    );
+    await connection.end();
+    return new Response(JSON.stringify({ success: true, products: rows }), { status: 200 });
+  } catch (err) {
+    return new Response(JSON.stringify({ success: false, message: err.message }), { status: 500 });
+  }
+}
+
