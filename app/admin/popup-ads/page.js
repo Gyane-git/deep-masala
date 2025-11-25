@@ -1,76 +1,115 @@
 "use client";
-import React, { useState } from 'react';
-import { X, Plus, Edit2, Trash2, ImageIcon } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { X, Plus, Edit2, Trash2, ImageIcon } from "lucide-react";
 
+const API_URL = "/api/popup-ads";
 
 export default function PopupAdsAdmin() {
-  const [ads, setAds] = useState([
-    { id: 1, title: 'Summer Sale', description: 'Get 50% off on all items', imageUrl: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400', link: 'https://example.com/sale', isActive: true },
-    { id: 2, title: 'New Collection', description: 'Check out our latest products', imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400', link: 'https://example.com/new', isActive: true },
-  ]);
-
+  const [ads, setAds] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingAd, setEditingAd] = useState(null);
-  
+
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    imageUrl: '',
-    link: '',
-    isActive: true
+    title: "",
+    color: "#000000",
+    isActive: true,
   });
+
+  useEffect(() => {
+    fetchAds();
+  }, []);
+
+  const fetchAds = async () => {
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+
+      const parsedAds = data.map((item) => ({
+        id: item.id,
+        title: item.title || "Untitled Ad",
+        color: item.color || "#000000",
+        isActive: !!item.isActive,
+      }));
+
+      setAds(parsedAds);
+    } catch (err) {
+      console.error("Failed to fetch ads:", err);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const requiredFields = ['title', 'description', 'imageUrl', 'link'];
-    const invalidFields = requiredFields.filter(field => !formData[field]);
-    if (invalidFields.length > 0) {
-      alert(`Please fill in the following required fields: ${invalidFields.join(', ')}`);
+
+    if (!formData.title) {
+      alert("Please enter the ad title");
       return;
     }
-    const newAd = { ...formData, id: editingAd ? editingAd.id : Date.now() };
-    if (editingAd) {
-      setAds(prev => prev.map(ad => ad.id === editingAd.id ? newAd : ad));
-    } else {
-      setAds(prev => [...prev, newAd]);
+
+    const adPayload = {
+      title: formData.title,
+      color: formData.color,
+    };
+
+    try {
+      if (editingAd) {
+        await fetch(API_URL, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: editingAd.id,
+            ads: [adPayload],
+            is_active: formData.isActive ? 1 : 0,
+          }),
+        });
+      } else {
+        await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ads: [adPayload],
+            is_active: formData.isActive ? 1 : 0,
+          }),
+        });
+      }
+
+      fetchAds();
+      resetForm();
+    } catch (err) {
+      console.error("Failed to save ad:", err);
     }
-    resetForm();
   };
 
   const handleEdit = (ad) => {
     setEditingAd(ad);
     setFormData({
       title: ad.title,
-      description: ad.description,
-      imageUrl: ad.imageUrl,
-      link: ad.link,
-      isActive: ad.isActive
+      color: ad.color || "#000000",
+      isActive: ad.isActive,
     });
     setShowModal(true);
   };
 
-  const handleDelete = (id) => {
-    if (confirm('Are you sure you want to delete this ad?')) {
-      setAds(prev => prev.filter(ad => ad.id !== id));
+  const handleDelete = async (id) => {
+    if (confirm("Are you sure you want to delete this ad?")) {
+      try {
+        await fetch(`${API_URL}?id=${id}`, { method: "DELETE" });
+        fetchAds();
+      } catch (err) {
+        console.error("Failed to delete ad:", err);
+      }
     }
   };
 
   const resetForm = () => {
-    setFormData({
-      title: '',
-      description: '',
-      imageUrl: '',
-      link: '',
-      isActive: true
-    });
+    setFormData({ title: "", color: "#000000", isActive: true });
     setEditingAd(null);
     setShowModal(false);
   };
@@ -78,21 +117,21 @@ export default function PopupAdsAdmin() {
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 p-6">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-slate-800 mb-2">Popup Ads Management</h1>
-              <p className="text-slate-600">Create and manage popup advertisements for your site</p>
-            </div>
-            <button
-              onClick={() => setShowModal(true)}
-              className="flex items-center gap-2 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-            >
-              <Plus size={20} />
-              Add New Ad
-            </button>
-          </div>
+
+        {/* TOP HEADER WITH ADD BUTTON */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-slate-800">Popup Ads Manager</h2>
+
+          <button
+            onClick={() => {
+              setEditingAd(null);
+              setFormData({ title: "", color: "#000000", isActive: true });
+              setShowModal(true);
+            }}
+            className="px-5 py-3 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 flex items-center gap-2"
+          >
+            <Plus size={18} /> Add New Ad
+          </button>
         </div>
 
         {/* Ads List */}
@@ -100,12 +139,14 @@ export default function PopupAdsAdmin() {
           <div className="bg-linear-to-r from-slate-700 to-slate-800 px-8 py-4">
             <h2 className="text-xl font-semibold text-white">Active Popup Ads</h2>
           </div>
-          
+
           <div className="p-6">
             {ads.length === 0 ? (
               <div className="text-center py-12">
                 <ImageIcon size={48} className="mx-auto text-slate-300 mb-4" />
-                <p className="text-slate-500 text-lg">No popup ads yet. Create your first one!</p>
+                <p className="text-slate-500 text-lg">
+                  No popup ads yet. Create your first one!
+                </p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -114,53 +155,40 @@ export default function PopupAdsAdmin() {
                     key={ad.id}
                     className="flex items-center gap-6 p-5 bg-linear-to-r from-slate-50 to-white border border-slate-200 rounded-xl hover:shadow-md transition-all"
                   >
-                    {/* Image Preview */}
-                    <div className="shrink-0 w-24 h-24 bg-slate-200 rounded-lg overflow-hidden">
-                      {ad.imageUrl ? (
-                        <img src={ad.imageUrl} alt={ad.title} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <ImageIcon size={32} className="text-slate-400" />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Content */}
                     <div className="grow min-w-0">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-bold text-slate-800 truncate">{ad.title}</h3>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          ad.isActive 
-                            ? 'bg-green-100 text-green-700' 
-                            : 'bg-red-100 text-red-700'
-                        }`}>
-                          {ad.isActive ? 'Active' : 'Inactive'}
+                        <span
+                          className="w-4 h-4 rounded-full border"
+                          style={{ backgroundColor: ad.color }}
+                        ></span>
+
+                        <h3 className="text-lg font-bold text-slate-800 truncate">
+                          {ad.title}
+                        </h3>
+
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            ad.isActive
+                              ? "bg-green-100 text-green-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                        >
+                          {ad.isActive ? "Active" : "Inactive"}
                         </span>
                       </div>
-                      <p className="text-slate-600 text-sm mb-2 line-clamp-2">{ad.description}</p>
-                      <a 
-                        href={ad.link} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-700 text-sm font-medium hover:underline"
-                      >
-                        {ad.link}
-                      </a>
                     </div>
 
-                    {/* Actions */}
                     <div className="flex gap-2 shrink-0">
                       <button
                         onClick={() => handleEdit(ad)}
-                        className="p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors"
-                        title="Edit"
+                        className="p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg"
                       >
                         <Edit2 size={18} />
                       </button>
+
                       <button
                         onClick={() => handleDelete(ad.id)}
-                        className="p-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
-                        title="Delete"
+                        className="p-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg"
                       >
                         <Trash2 size={18} />
                       </button>
@@ -176,115 +204,62 @@ export default function PopupAdsAdmin() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            {/* Modal Header */}
-            <div className="bg-linear-to-r from-blue-600 to-blue-700 px-8 py-6 flex items-center justify-between sticky top-0">
-              <h2 className="text-2xl font-bold text-white">
-                {editingAd ? 'Edit Popup Ad' : 'Create New Popup Ad'}
-              </h2>
-              <button
-                onClick={resetForm}
-                className="text-white hover:bg-white hover:bg-opacity-20 p-2 rounded-lg transition-colors"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            {/* Modal Form */}
-            <div className="p-8">
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Title *
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                    placeholder="Enter ad title"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Description *
-                  </label>
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    required
-                    rows="3"
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
-                    placeholder="Enter ad description"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Image URL *
-                  </label>
-                  <input
-                    type="url"
-                    name="imageUrl"
-                    value={formData.imageUrl}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                    placeholder="https://example.com/image.jpg"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Link URL *
-                  </label>
-                  <input
-                    type="url"
-                    name="link"
-                    value={formData.link}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                    placeholder="https://example.com/landing-page"
-                  />
-                </div>
-
-                <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-lg">
-                  <input
-                    type="checkbox"
-                    name="isActive"
-                    id="isActive"
-                    checked={formData.isActive}
-                    onChange={handleInputChange}
-                    className="w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
-                  />
-                  <label htmlFor="isActive" className="text-sm font-semibold text-slate-700 cursor-pointer">
-                    Set as active (will be displayed on site)
-                  </label>
-                </div>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
+            <form onSubmit={handleSubmit} className="p-8 space-y-6">
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Ad Title *
+                </label>
+                <textarea
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border rounded-lg text-black"
+                  required
+                />
               </div>
 
-              {/* Modal Actions */}
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Color *
+                </label>
+                <input
+                  type="color"
+                  name="color"
+                  value={formData.color}
+                  onChange={handleInputChange}
+                  className="w-16 h-10 border rounded cursor-pointer"
+                />
+              </div>
+
+              <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-lg">
+                <input
+                  type="checkbox"
+                  name="isActive"
+                  checked={formData.isActive}
+                  onChange={handleInputChange}
+                  className="w-5 h-5"
+                />
+                <span>Set as active</span>
+              </div>
+
               <div className="flex gap-4 mt-8">
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="flex-1 px-6 py-3 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition-colors"
+                  className="flex-1 px-6 py-3 border rounded-lg"
                 >
                   Cancel
                 </button>
+
                 <button
                   type="submit"
-                  className="flex-1 px-6 py-3 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all"
+                  className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg"
                 >
-                  {editingAd ? 'Update Ad' : 'Create Ad'}
+                  {editingAd ? "Update Ad" : "Create Ad"}
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       )}

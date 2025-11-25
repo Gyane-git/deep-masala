@@ -7,7 +7,6 @@ const DashboardPage = () => {
   const statsCards = [
     { icon: Package, label: 'Products', value: '1339', color: 'bg-orange-100', iconColor: 'text-orange-600' },
     { icon: FolderTree, label: 'Categories', value: '26', color: 'bg-orange-100', iconColor: 'text-orange-600' },
-    { icon: Flag, label: 'Brands', value: '129', color: 'bg-orange-100', iconColor: 'text-orange-600' },
     { icon: Users, label: 'Customers', value: '90', color: 'bg-orange-100', iconColor: 'text-orange-600' },
     { icon: ShoppingCart, label: 'Orders', value: '507', color: 'bg-orange-100', iconColor: 'text-orange-600' },
     { icon: MessageSquare, label: 'Inquiries', value: '29', color: 'bg-green-100', iconColor: 'text-green-600' },
