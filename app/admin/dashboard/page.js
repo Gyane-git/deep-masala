@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Package, FolderTree, Flag, Users, ShoppingCart, MessageSquare, Bell, Star, UserCircle } from 'lucide-react';
+import { Package, FolderTree,  Users, ShoppingCart, MessageSquare, Bell, Star, UserCircle } from 'lucide-react';
 
 
 const DashboardPage = () => {

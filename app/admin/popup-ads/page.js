@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { X, Plus, Edit2, Trash2, ImageIcon } from "lucide-react";
+import {  Plus, Edit2, Trash2, ImageIcon } from "lucide-react";
 
 const API_URL = "/api/popup-ads";
 
@@ -16,6 +16,7 @@ export default function PopupAdsAdmin() {
   });
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/immutability
     fetchAds();
   }, []);
 

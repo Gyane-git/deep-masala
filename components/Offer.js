@@ -8,6 +8,7 @@ const PromoBannerSlider = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/immutability
     fetchSlides();
   }, []);
 
@@ -67,7 +68,7 @@ const PromoBannerSlider = () => {
 
         {/* Content */}
         <div className="flex items-center justify-center gap-3 flex-1">
-          <div className="flex-shrink-0">{slides[currentSlide].icon}</div>
+          <div className="shrink-0">{slides[currentSlide].icon}</div>
 
           <p className="text-sm md:text-base font-medium text-center">
             {slides[currentSlide].text}
