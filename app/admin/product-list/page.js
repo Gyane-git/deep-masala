@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit2, Trash2 } from "lucide-react";
+import { Edit2, Trash2, Info, Plus, Search } from "lucide-react";
 import Image from "next/image";
 
 const PRODUCT_API = "/api/products";
@@ -63,110 +63,207 @@ export default function ProductListPage() {
 
   // Delete product
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure?")) return;
+    if (!confirm("Are you sure you want to delete this product?")) return;
 
     await fetch(`${PRODUCT_API}/${id}`, { method: "DELETE" });
     setProducts(products.filter((p) => p.id !== id));
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Products</h1>
-
-      {/* Filters */}
-      <div className="flex flex-wrap gap-4 mb-6">
-        <input
-          type="text"
-          placeholder="Search product..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border p-2 rounded w-full md:w-60"
-        />
-
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="border p-2 rounded"
-        >
-          <option value="">All Categories</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.name}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
+    <div className="min-h-screen bg-gray-50 p-6">
+      {/* Header */}
+      <div className="bg-white rounded-lg shadow-sm p-6 mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Products</h1>
+          <p className="text-gray-500 mt-1">Manage your product inventory</p>
+        </div>
+        <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+          <Plus size={20} />
+          Add Product
+        </button>
       </div>
 
-      {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {currentItems.map((product) => (
-          <div
-            key={product.id}
-            className="border rounded-lg p-4 shadow hover:shadow-xl transition"
-          >
-            {/* Image */}
-            <div className="w-full h-48 relative mb-3 bg-gray-100 rounded overflow-hidden">
-              <Image
-                src={product.main_image || "/no-image.png"}
-                alt={product.product_name}
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            {/* Product Info */}
-            <h2 className="font-bold text-lg">{product.product_name}</h2>
-            <p className="text-sm text-gray-600">
-              Category: {product.categories || "No Category"}
-            </p>
-            <p className="text-sm text-gray-600">
-              Code: {product.product_code}
-            </p>
-            <p className="text-sm text-gray-600">
-              Brand: {product.brand || "No Brand"}
-            </p>
-            <p className="font-semibold text-green-600 mt-1">
-              Rs. {product.selling_price}
-            </p>
-            <p className="text-xs line-through text-gray-400">
-              Rs. {product.actual_price}
-            </p>
-            <p className="text-sm mt-1">
-              Available Quantity: {product.available_quantity || 0}
-            </p>
-
-            {/* Action Buttons */}
-            <div className="flex gap-3 mt-4">
-              <button className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-500 text-white rounded">
-                <Edit2 size={16} /> Edit
-              </button>
-              <button
-                onClick={() => handleDelete(product.id)}
-                className="flex items-center gap-1 px-3 py-1 text-sm bg-red-500 text-white rounded"
-              >
-                <Trash2 size={16} /> Delete
-              </button>
-            </div>
+      {/* Filters */}
+      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="flex flex-wrap gap-4">
+          <div className="relative flex-1 min-w-[300px]">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </div>
-        ))}
+
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          >
+            <option value="">All Categories</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.name}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Product Table */}
+      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        <table className="w-full">
+          <thead className="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Image
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Code
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Product Name
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Category
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Price
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Stock
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {currentItems.map((product) => (
+              <tr key={product.id} className="hover:bg-gray-50 transition">
+                {/* Image */}
+                <td className="px-6 py-4">
+                  <div className="w-12 h-12 relative rounded-lg overflow-hidden bg-gray-100">
+                    <Image
+                      src={product.main_image || "/no-image.png"}
+                      alt={product.product_name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </td>
+
+                {/* Code */}
+                <td className="px-6 py-4">
+                  <span className="text-sm font-medium text-gray-900">
+                    {product.product_code}
+                  </span>
+                </td>
+
+                {/* Product Name */}
+                <td className="px-6 py-4">
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">
+                      {product.product_name}
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      Brand Name
+                    </div>
+                  </div>
+                </td>
+
+                {/* Category */}
+                <td className="px-6 py-4">
+                  <span className="inline-flex px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">
+                    {product.categories || "Uncategorized"}
+                  </span>
+                </td>
+
+                {/* Price */}
+                <td className="px-6 py-4">
+                  <div>
+                    <div className="text-sm font-bold text-gray-900">
+                      Rs. {product.selling_price}
+                    </div>
+                    <div className="text-xs text-gray-400 line-through">
+                      Rs. {product.actual_price}
+                    </div>
+                  </div>
+                </td>
+
+                {/* Stock */}
+                <td className="px-6 py-4">
+                  <span className="text-sm font-medium text-gray-900">
+                    {product.available_quantity || 0}
+                  </span>
+                </td>
+
+                {/* Status */}
+                <td className="px-6 py-4">
+                  {product.available_quantity > 0 ? (
+                    <span className="inline-flex px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                      Active
+                    </span>
+                  ) : (
+                    <span className="inline-flex px-3 py-1 text-xs font-medium rounded-full bg-red-100 text-red-700">
+                      Out of Stock
+                    </span>
+                  )}
+                </td>
+
+                {/* Actions */}
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-2">
+                    <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition">
+                      <Info size={18} />
+                    </button>
+                    <button className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition">
+                      <Edit2 size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(product.id)}
+                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Empty State */}
+        {currentItems.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500">No products found</p>
+          </div>
+        )}
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-center mt-6 gap-3">
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentPage(i + 1)}
-            className={`px-3 py-1 rounded border ${
-              currentPage === i + 1
-                ? "bg-black text-white"
-                : "bg-white text-black"
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
-      </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-6 gap-2">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-4 py-2 rounded-lg font-medium transition ${
+                currentPage === i + 1
+                  ? "bg-blue-600 text-white"
+                  : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
