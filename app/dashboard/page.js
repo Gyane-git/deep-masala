@@ -86,7 +86,7 @@ export default function HomePage() {
   return (
     <div className="bg-white">
       {/* Hero Slider Section */}
-      <section className="relative h-screen w-full overflow-hidden">
+      <section className="relative h-[85vh]  overflow-hidden">
         {slides.map((slide, index) => (
           <div
             key={index}
@@ -95,13 +95,16 @@ export default function HomePage() {
             }`}
             aria-hidden={index === currentSlide ? "false" : "true"}
           >
-            <Image
-              src={slide}
-              alt={`Slide ${index + 1}`}
-              fill
-              className="object-cover"
-              priority={index === 0}
-            />
+            <div className="absolute inset-0 bg-black flex items-center justify-center">
+              <Image
+                src={slide}
+                alt={`Slide ${index + 1}`}
+                fill
+                className="object-contain"
+                sizes="100vw"
+                priority={index === 0}
+              />
+            </div>
           </div>
         ))}
 
@@ -161,7 +164,9 @@ export default function HomePage() {
               </div>
             </div>
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">About Us</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                About Us
+              </h2>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 <span className="bg-red-600 text-white px-2 py-1 font-semibold">
                   At Deep, spice bhejo
@@ -180,9 +185,8 @@ export default function HomePage() {
                   Tasteeto range
                 </span>
                 – crafted for quick, delicious everyday cooking, we are here to
-                make every dish effortlessly flavourful. Deep is not just
-                about spices: its about seasoning lives with taste and
-                tradition.
+                make every dish effortlessly flavourful. Deep is not just about
+                spices: its about seasoning lives with taste and tradition.
               </p>
               <button className="bg-black text-white px-8 py-3 rounded hover:bg-gray-800 transition-colors font-semibold">
                 Learn More
