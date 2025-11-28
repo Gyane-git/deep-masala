@@ -32,7 +32,7 @@ export default function CategoriesSlider() {
   if (categories.length === 0) return <p className="text-center mt-10">Loading categories...</p>;
 
   return (
-    <div className="max-w-7xl mx-auto py-10">
+    <div className="max-w-7xl bg-gray-200 mx-auto py-10">
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 2500, disableOnInteraction: false }}
@@ -48,7 +48,7 @@ export default function CategoriesSlider() {
       >
         {categories.map((cat) => (
           <SwiperSlide key={cat.id}>
-            <div className="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition bg-white">
+            <div className="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition bg-gray-300">
               {cat.image ? (
                 <Image
                   src={cat.image} // e.g., "/categories/abc.png"
@@ -63,7 +63,7 @@ export default function CategoriesSlider() {
                 </div>
               )}
               <div className="p-4 text-center">
-                <h3 className="text-lg font-semibold">{cat.name}</h3>
+                <h3 className="text-lg text-black font-semibold">{cat.name}</h3>
                 <p className="text-gray-500 text-sm">{cat.description}</p>
               </div>
             </div>
