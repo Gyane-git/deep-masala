@@ -1,108 +1,274 @@
-"use client";
-
 import { useState, useEffect } from "react";
-import { Grid, View, Search } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Grid, List, Search, ChevronDown } from "lucide-react";
 
 export default function ProductListPage() {
-  const router = useRouter();
-
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [viewMode, setViewMode] = useState("grid");
 
   useEffect(() => {
-    const load = async () => {
-      const res = await fetch("http://localhost:3000/api/products");
-      const data = await res.json();
-      if (data.success) setProducts(data.products);
-      setLoading(false);
+    const loadData = async () => {
+      try {
+        const [productsRes, categoriesRes] = await Promise.all([
+          fetch("http://localhost:3000/api/products"),
+          fetch("http://localhost:3000/api/categories")
+        ]);
+        
+        const productsData = await productsRes.json();
+        const categoriesData = await categoriesRes.json();
+        
+        if (productsData.success) setProducts(productsData.products);
+        if (categoriesData.success) setCategories(categoriesData.categories);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+      }
     };
-    load();
+    loadData();
   }, []);
 
   const filtered = products.filter((p) => {
-    const q = searchQuery.toLowerCase();
-    return (
-      p.product_name?.toLowerCase().includes(q) ||
-      p.product_code?.toLowerCase().includes(q)
-    );
+    const matchesSearch = searchQuery === "" || 
+      p.product_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.product_code?.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesCategory = selectedCategory === "all" || 
+      p.category_id?.toString() === selectedCategory;
+    
+    return matchesSearch && matchesCategory;
   });
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6 bg-amber-200">
-        <div>
-          <h1 className="text-3xl font-bold">All Products</h1>
-          <p className="text-gray-500">
-            Showing {filtered.length} products
-          </p>
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Header Section */}
+        <div className="mb-8 animate-fadeIn">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">All Products</h1>
+          <p className="text-gray-600">Showing {filtered.length} products</p>
         </div>
 
-        {/* Search */}
-        <div className="relative w-72 bg-gray-100 rounded-lg">
-          <Search className="absolute left-3 top-3 text-gray-500" size={18} />
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="w-full pl-10 pr-3 py-2 border rounded-lg outline-none"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {filtered.map((product) => (
-          <div
-            key={product.id}
-            className="bg-gray-300 rounded-2xl shadow hover:shadow-xl transition cursor-pointer p-4"
-            onClick={() => router.push(`/admin/product-list/${product.id}`)}
-          >
-            {/* Image */}
-            <div className="relative mb-4">
-              <img
-                src={product.main_image}
-                className="w-full h-72 object-cover rounded-xl"
-                alt={product.product_name}
-              />
-
-              {/* Badge */}
-              <span className="absolute top-3 left-3 bg-green-600 text-white text-xs px-3 py-1 rounded-full shadow">
-                New
-              </span>
+        {/* Filters Bar */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 mb-8 animate-slideDown">
+          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+            
+            {/* Category Filter */}
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setSelectedCategory("all")}
+                className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 transform hover:scale-105 ${
+                  selectedCategory === "all"
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                All
+              </button>
+              
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.id.toString())}
+                  className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 transform hover:scale-105 ${
+                    selectedCategory === category.id.toString()
+                      ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {category.name}
+                </button>
+              ))}
             </div>
 
-            {/* Name */}
-            <h3 className="font-semibold text-lg  text-black leading-tight">
-              {product.product_name || "Unnamed Product"}
-            </h3>
+            {/* Search & View Toggle */}
+            <div className="flex gap-3 w-full lg:w-auto">
+              <div className="relative flex-1 lg:flex-initial lg:w-72">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-700" size={20} />
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="w-full pl-12 pr-4 py-3 border text-black border-gray-400 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
 
-            {/* Price */}
-            <div className="mt-2">
-              <p className="text-xl font-bold text-gray-800">
-                ${product.selling_price || 0}
-              </p>
-
-              {product.actual_price && (
-                <p className="text-sm text-gray-500 line-through">
-                  ${product.actual_price}
-                </p>
-              )}
+              <div className="flex gap-2 bg-gray-100 p-1 rounded-xl">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2.5 rounded-lg transition-all ${
+                    viewMode === "grid"
+                      ? "bg-white text-blue-600 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  <Grid size={20} />
+                </button>
+                <button
+                  onClick={() => setViewMode("list")}
+                  className={`p-2.5 rounded-lg transition-all ${
+                    viewMode === "list"
+                      ? "bg-white text-blue-600 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  <List size={20} />
+                </button>
+              </div>
             </div>
-
-            {/* Rating (Static placeholder) */}
-            <div className="flex items-center mt-2 gap-1">
-              <span className="text-yellow-500 text-lg">★</span>
-              <span className="font-medium text-gray-700">4.8</span>
-            </div>
-
           </div>
-        ))}
+        </div>
+
+        {/* Products Grid/List */}
+        {filtered.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-gray-500 text-lg">No products found</p>
+          </div>
+        ) : (
+          <div className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6"
+              : "flex flex-col gap-4"
+          }>
+            {filtered.map((product, index) => (
+              <div
+                key={product.id}
+                className={`group bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden animate-fadeInUp ${
+                  viewMode === "list" ? "flex" : ""
+                }`}
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                {/* Image */}
+                <div className={`relative overflow-hidden ${viewMode === "list" ? "w-48" : ""}`}>
+                  <img
+                    src={product.main_image || "https://via.placeholder.com/300"}
+                    className={`w-full object-cover transition-transform duration-700 group-hover:scale-110 ${
+                      viewMode === "list" ? "h-full" : "h-120"
+                    }`}
+                    alt={product.product_name}
+                  />
+                  
+                  {/* Badges */}
+                  <div className="absolute top-3 left-3 flex gap-2">
+                    {product.special && (
+                      <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
+                        Discount
+                      </span>
+                    )}
+                    
+                    {product.actual_price && product.selling_price < product.actual_price && (
+                      <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
+                        Sale
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                </div>
+
+                {/* Content */}
+                <div className={`p-5 flex-1 ${viewMode === "list" ? "flex flex-col justify-center" : ""}`}>
+                  <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                    {product.product_name || "Unnamed Product"}
+                  </h3>
+
+                  {/* Price */}
+                  <div className="flex items-baseline gap-2 mb-3">
+                    <p className="text-2xl font-bold text-gray-900">
+                      ${product.selling_price || 0}
+                    </p>
+                    {product.actual_price && product.actual_price > product.selling_price && (
+                      <>
+                        <p className="text-sm text-gray-500 line-through">
+                          ${product.actual_price}
+                        </p>
+                        <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">
+                          {Math.round(((product.actual_price - product.selling_price) / product.actual_price) * 100)}% OFF
+                        </span>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Rating */}
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <span key={i} className="text-yellow-400 text-sm">★</span>
+                      ))}
+                    </div>
+                    <span className="text-sm font-medium text-gray-700">4.8</span>
+                    <span className="text-sm text-gray-500">(124)</span>
+                  </div>
+
+                  {/* Button */}
+                  <button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2.5 rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg shadow-blue-600/20">
+                    View Details
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 0.6s ease-out;
+        }
+
+        .animate-slideDown {
+          animation: slideDown 0.6s ease-out;
+        }
+
+        .animate-fadeInUp {
+          animation: fadeInUp 0.6s ease-out forwards;
+          opacity: 0;
+        }
+      `}</style>
     </div>
   );
 }

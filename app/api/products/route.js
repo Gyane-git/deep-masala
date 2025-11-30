@@ -31,6 +31,7 @@ export async function POST(req) {
     const category_id = formData.get("category_id") || null;
     const brand = formData.get("brand") || null;
     const deliveryTargetDays = formData.get("deliveryTargetDays") || null;
+    const size = formData.get("size") || null;
 
     // boolean flags: may come as "on"/"true" or actual booleans; handle both
     const weeklyProduct = formData.get("weeklyProduct") ? 1 : 0;
@@ -100,7 +101,7 @@ export async function POST(req) {
        actual_price, selling_price, available_quantity, stock_quantity,
        product_description, key_specifications, packaging, warranty,
        product_catalog, main_image)
-      VALUES (?, ?, ?, ?, ?, ?,
+      VALUES (?, ?, ?, ?, ?, ?, ?,
               ?, ?, ?, ?,
               ?, ?, ?, ?,
               ?, ?, ?, ?,
@@ -118,6 +119,7 @@ export async function POST(req) {
       flashSaleProduct,
       todayDeals,
       specialProduct,
+      size,
       actualPrice || null,
       sellingPrice || null,
       availableQuantity || null,

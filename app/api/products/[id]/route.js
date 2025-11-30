@@ -67,6 +67,8 @@ export async function PUT(req, { params }) {
     const todayDeals = formData.get("todayDeals") ? 1 : 0;
     const specialProduct = formData.get("specialProduct") ? 1 : 0;
 
+    const size = formData.get("size") || null;
+
     const actualPrice = formData.get("actualPrice") || null;
     const sellingPrice = formData.get("sellingPrice") || null;
     const availableQuantity = formData.get("availableQuantity") || null;
@@ -113,7 +115,7 @@ export async function PUT(req, { params }) {
     const updateSQL = `
       UPDATE products SET
         product_code = ?, product_name = ?, categories = ?, category_id = ?, brand = ?, delivery_target_days = ?,
-        weekly_product = ?, flash_sale_product = ?, today_deals = ?, special_product = ?,
+        weekly_product = ?, flash_sale_product = ?, today_deals = ?, special_product = ?, size = ?,
         actual_price = ?, selling_price = ?, available_quantity = ?, stock_quantity = ?,
         product_description = ?, key_specifications = ?, packaging = ?, warranty = ?,
         product_catalog = COALESCE(?, product_catalog),
@@ -132,6 +134,7 @@ export async function PUT(req, { params }) {
       flashSaleProduct,
       todayDeals,
       specialProduct,
+      size,
       actualPrice,
       sellingPrice,
       availableQuantity,
