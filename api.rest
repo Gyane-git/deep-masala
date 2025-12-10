@@ -4,3 +4,7 @@ GET http://localhost:3000/api/banner
 ### Categories
 GET http://localhost:3000/api/categories
 
+
+### Products
+https://globaltechnepal.com/api/clients
+
