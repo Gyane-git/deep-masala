@@ -161,7 +161,7 @@ export default function ProductListPage() {
               >
                 {/* Image */}
                 <div
-                  className={`relative overflow-hidden ${
+                  className={`relative overflow-hidden rounded-xl group shadow-md hover:shadow-xl transition-shadow duration-300 ${
                     viewMode === "list" ? "w-48" : ""
                   }`}
                 >
@@ -169,30 +169,30 @@ export default function ProductListPage() {
                     src={
                       product.main_image || "https://via.placeholder.com/300"
                     }
-                    className={`w-full object-cover transition-transform duration-700 group-hover:scale-110 ${
-                      viewMode === "list" ? "h-full" : "h-120"
+                    className={`w-full object-contain transition-transform duration-700 ease-in-out group-hover:scale-105 ${
+                      viewMode === "list" ? "h-48" : "h-72 md:h-80"
                     }`}
                     alt={product.product_name}
                   />
 
                   {/* Badges */}
-                  <div className="absolute top-3 left-3 flex gap-2">
+                  <div className="absolute top-3 left-3 flex flex-col gap-2">
                     {product.special && (
-                      <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
+                      <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
                         Discount
                       </span>
                     )}
 
                     {product.actual_price &&
                       product.selling_price < product.actual_price && (
-                        <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
+                        <span className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
                           Sale
                         </span>
                       )}
                   </div>
 
-                  {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  {/* Overlay for hover effect */}
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-40 transition-opacity duration-500 rounded-xl"></div>
                 </div>
 
                 {/* Content */}
@@ -208,13 +208,13 @@ export default function ProductListPage() {
                   {/* Price */}
                   <div className="flex items-baseline gap-2 mb-3">
                     <p className="text-2xl font-bold text-gray-900">
-                      ${product.selling_price || 0}
+                      Rs. {product.selling_price || 0}
                     </p>
                     {product.actual_price &&
                       product.actual_price > product.selling_price && (
                         <>
                           <p className="text-sm text-gray-500 line-through">
-                            ${product.actual_price}
+                            Rs. {product.actual_price}
                           </p>
                           <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">
                             {Math.round(

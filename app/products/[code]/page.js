@@ -81,37 +81,56 @@ export default function ProductDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Images */}
         <div className="space-y-4">
-          <div className="aspect-square bg-gray-50 rounded-xl overflow-hidden relative">
-            <img
-              src={images[selectedImage]}
-              className="w-full h-full object-cover"
-            />
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={() =>
-                    setSelectedImage((i) => (i > 0 ? i - 1 : images.length - 1))
-                  }
-                  className="absolute left-4 top-1/2 bg-white/80 p-2 rounded-full"
-                >
-                  <ChevronLeft />
-                </button>
-                <button
-                  onClick={() =>
-                    setSelectedImage((i) => (i < images.length - 1 ? i + 1 : 0))
-                  }
-                  className="absolute right-4 top-1/2 bg-white/80 p-2 rounded-full"
-                >
-                  <ChevronRight />
-                </button>
-              </>
-            )}
-          </div>
-        </div>
+  <div className="aspect-square bg-gray-50 rounded-2xl overflow-hidden relative flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <img
+      src={images[selectedImage]}
+      className="w-full h-full object-contain object-center transition-transform duration-300 ease-in-out hover:scale-90"
+      alt="Product image"
+    />
+
+    {images.length > 1 && (
+      <>
+        <button
+          onClick={() =>
+            setSelectedImage((i) => (i > 0 ? i - 1 : images.length - 1))
+          }
+          className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 p-3  rounded-full shadow-md hover:bg-white transition-colors duration-200"
+        >
+          <ChevronLeft className="w-5 h-5 text-gray-800" />
+        </button>
+        <button
+          onClick={() =>
+            setSelectedImage((i) => (i < images.length - 1 ? i + 1 : 0))
+          }
+          className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 p-3 rounded-full shadow-md hover:bg-white transition-colors duration-200"
+        >
+          <ChevronRight className="w-5 h-5 text-gray-800" />
+        </button>
+      </>
+    )}
+
+    {/* Optional: small image indicator dots */}
+    {images.length > 1 && (
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+        {images.map((_, idx) => (
+          <span
+            key={idx}
+            className={`w-2 h-2 rounded-full transition-colors ${
+              selectedImage === idx ? "bg-blue-600" : "bg-gray-300"
+            }`}
+          />
+        ))}
+      </div>
+    )}
+  </div>
+</div>
+
 
         {/* Info */}
         <div className="space-y-6">
-          <h1 className="text-3xl font-bold text-gray-900">{product.product_name}</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {product.product_name}
+          </h1>
 
           {/* Rating */}
           <div className="flex items-center gap-1">
@@ -154,10 +173,7 @@ export default function ProductDetailPage() {
                 <Minus />
               </button>
               <span className="px-4">{quantity}</span>
-              <button
-                onClick={() => setQuantity(quantity + 1)}
-                className="p-2"
-              >
+              <button onClick={() => setQuantity(quantity + 1)} className="p-2">
                 <Plus />
               </button>
             </div>
@@ -215,14 +231,10 @@ export default function ProductDetailPage() {
 
         <div className="py-6">
           {activeTab === "description" && (
-            <p className="text-gray-700">
-              {product.product_description}
-            </p>
+            <p className="text-gray-700">{product.product_description}</p>
           )}
           {activeTab === "specifications" && (
-            <p className="text-gray-700">
-              {product.key_specifications}
-            </p>
+            <p className="text-gray-700">{product.key_specifications}</p>
           )}
         </div>
       </div>
