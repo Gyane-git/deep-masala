@@ -71,11 +71,11 @@ export default function ProductDetailPage() {
       : 0;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-8 ">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6">
         Home / Products /{" "}
-        <span className="text-gray-900">{product.product_name}</span>
+        <span className="text-blue-600">{product.product_name}</span>
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -111,7 +111,7 @@ export default function ProductDetailPage() {
 
         {/* Info */}
         <div className="space-y-6">
-          <h1 className="text-3xl font-bold">{product.product_name}</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{product.product_name}</h1>
 
           {/* Rating */}
           <div className="flex items-center gap-1">
@@ -126,7 +126,7 @@ export default function ProductDetailPage() {
 
           {/* Price */}
           <div className="flex items-center gap-3">
-            <span className="text-3xl font-bold">
+            <span className="text-3xl font-bold text-blue-400">
               Rs. {product.selling_price}
             </span>
             {product.actual_price && (
@@ -145,8 +145,8 @@ export default function ProductDetailPage() {
 
           {/* Quantity */}
           <div className="flex items-center gap-4">
-            <span className="font-medium">Quantity:</span>
-            <div className="flex items-center border rounded-lg">
+            <span className="font-medium text-gray-500">Quantity:</span>
+            <div className="flex items-center text-gray-500  border rounded-lg">
               <button
                 onClick={() => quantity > 1 && setQuantity(quantity - 1)}
                 className="p-2"
@@ -174,7 +174,7 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Info boxes */}
-          <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+          <div className="bg-gray-50 rounded-lg p-4 text-gray-500 space-y-3">
             <div className="flex gap-3">
               <Truck className="text-blue-600" />
               Free Delivery

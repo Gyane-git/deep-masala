@@ -96,7 +96,7 @@ export async function POST(req) {
 
     const insertSQL = `
       INSERT INTO products
-      (product_code, product_name, categories, category_id, brand, delivery_target_days,
+      (product_code, product_name, categories, category_id, brand, delivery_target_days,size,
        weekly_product, flash_sale_product, today_deals, special_product,
        actual_price, selling_price, available_quantity, stock_quantity,
        product_description, key_specifications, packaging, warranty,
