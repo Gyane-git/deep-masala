@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Grid, List, Search, ChevronDown } from "lucide-react";
 
 export default function ProductListPage() {
@@ -14,12 +15,12 @@ export default function ProductListPage() {
       try {
         const [productsRes, categoriesRes] = await Promise.all([
           fetch("http://localhost:3000/api/products"),
-          fetch("http://localhost:3000/api/categories")
+          fetch("http://localhost:3000/api/categories"),
         ]);
-        
+
         const productsData = await productsRes.json();
         const categoriesData = await categoriesRes.json();
-        
+
         if (productsData.success) setProducts(productsData.products);
         if (categoriesData.success) setCategories(categoriesData.categories);
       } catch (error) {
@@ -32,13 +33,15 @@ export default function ProductListPage() {
   }, []);
 
   const filtered = products.filter((p) => {
-    const matchesSearch = searchQuery === "" || 
+    const matchesSearch =
+      searchQuery === "" ||
       p.product_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.product_code?.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesCategory = selectedCategory === "all" || 
+
+    const matchesCategory =
+      selectedCategory === "all" ||
       p.category_id?.toString() === selectedCategory;
-    
+
     return matchesSearch && matchesCategory;
   });
 
@@ -53,17 +56,17 @@ export default function ProductListPage() {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
         {/* Header Section */}
         <div className="mb-8 animate-fadeIn">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">All Products</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            All Products
+          </h1>
           <p className="text-gray-600">Showing {filtered.length} products</p>
         </div>
 
         {/* Filters Bar */}
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-8 animate-slideDown">
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
-            
             {/* Category Filter */}
             <div className="flex flex-wrap gap-2">
               <button
@@ -76,7 +79,7 @@ export default function ProductListPage() {
               >
                 All
               </button>
-              
+
               {categories.map((category) => (
                 <button
                   key={category.id}
@@ -95,7 +98,10 @@ export default function ProductListPage() {
             {/* Search & View Toggle */}
             <div className="flex gap-3 w-full lg:w-auto">
               <div className="relative flex-1 lg:flex-initial lg:w-72">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-700" size={20} />
+                <Search
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-700"
+                  size={20}
+                />
                 <input
                   type="text"
                   placeholder="Search products..."
@@ -137,29 +143,38 @@ export default function ProductListPage() {
             <p className="text-gray-500 text-lg">No products found</p>
           </div>
         ) : (
-          <div className={
-            viewMode === "grid"
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6"
-              : "flex flex-col gap-4"
-          }>
+          <div
+            className={
+              viewMode === "grid"
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6"
+                : "flex flex-col gap-4"
+            }
+          >
             {filtered.map((product, index) => (
-              <div
+              <Link
                 key={product.id}
+                href={`/products/${product.product_code}`}
                 className={`group bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden animate-fadeInUp ${
                   viewMode === "list" ? "flex" : ""
                 }`}
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 {/* Image */}
-                <div className={`relative overflow-hidden ${viewMode === "list" ? "w-48" : ""}`}>
+                <div
+                  className={`relative overflow-hidden ${
+                    viewMode === "list" ? "w-48" : ""
+                  }`}
+                >
                   <img
-                    src={product.main_image || "https://via.placeholder.com/300"}
+                    src={
+                      product.main_image || "https://via.placeholder.com/300"
+                    }
                     className={`w-full object-cover transition-transform duration-700 group-hover:scale-110 ${
                       viewMode === "list" ? "h-full" : "h-120"
                     }`}
                     alt={product.product_name}
                   />
-                  
+
                   {/* Badges */}
                   <div className="absolute top-3 left-3 flex gap-2">
                     {product.special && (
@@ -167,12 +182,13 @@ export default function ProductListPage() {
                         Discount
                       </span>
                     )}
-                    
-                    {product.actual_price && product.selling_price < product.actual_price && (
-                      <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
-                        Sale
-                      </span>
-                    )}
+
+                    {product.actual_price &&
+                      product.selling_price < product.actual_price && (
+                        <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
+                          Sale
+                        </span>
+                      )}
                   </div>
 
                   {/* Overlay */}
@@ -180,7 +196,11 @@ export default function ProductListPage() {
                 </div>
 
                 {/* Content */}
-                <div className={`p-5 flex-1 ${viewMode === "list" ? "flex flex-col justify-center" : ""}`}>
+                <div
+                  className={`p-5 flex-1 ${
+                    viewMode === "list" ? "flex flex-col justify-center" : ""
+                  }`}
+                >
                   <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                     {product.product_name || "Unnamed Product"}
                   </h3>
@@ -190,26 +210,36 @@ export default function ProductListPage() {
                     <p className="text-2xl font-bold text-gray-900">
                       ${product.selling_price || 0}
                     </p>
-                    {product.actual_price && product.actual_price > product.selling_price && (
-                      <>
-                        <p className="text-sm text-gray-500 line-through">
-                          ${product.actual_price}
-                        </p>
-                        <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">
-                          {Math.round(((product.actual_price - product.selling_price) / product.actual_price) * 100)}% OFF
-                        </span>
-                      </>
-                    )}
+                    {product.actual_price &&
+                      product.actual_price > product.selling_price && (
+                        <>
+                          <p className="text-sm text-gray-500 line-through">
+                            ${product.actual_price}
+                          </p>
+                          <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">
+                            {Math.round(
+                              ((product.actual_price - product.selling_price) /
+                                product.actual_price) *
+                                100
+                            )}
+                            % OFF
+                          </span>
+                        </>
+                      )}
                   </div>
 
                   {/* Rating */}
                   <div className="flex items-center gap-2 mb-4">
                     <div className="flex">
                       {[...Array(5)].map((_, i) => (
-                        <span key={i} className="text-yellow-400 text-sm">★</span>
+                        <span key={i} className="text-yellow-400 text-sm">
+                          ★
+                        </span>
                       ))}
                     </div>
-                    <span className="text-sm font-medium text-gray-700">4.8</span>
+                    <span className="text-sm font-medium text-gray-700">
+                      4.8
+                    </span>
                     <span className="text-sm text-gray-500">(124)</span>
                   </div>
 
@@ -218,7 +248,7 @@ export default function ProductListPage() {
                     View Details
                   </button>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
