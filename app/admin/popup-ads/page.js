@@ -121,7 +121,7 @@ export default function PopupAdsAdmin() {
 
         {/* TOP HEADER WITH ADD BUTTON */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-slate-800">Popup Ads Manager</h2>
+          <h2 className="text-2xl font-bold text-slate-800 " >Popup Ads Manager</h2>
 
           <button
             onClick={() => {
@@ -208,7 +208,7 @@ export default function PopupAdsAdmin() {
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
             <form onSubmit={handleSubmit} className="p-8 space-y-6">
               <div>
-                <label className="block text-sm font-semibold mb-2">
+                <label className="block text-sm font-semibold mb-2 text-gray-900" >
                   Ad Title *
                 </label>
                 <textarea
@@ -221,7 +221,7 @@ export default function PopupAdsAdmin() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold mb-2">
+                <label className="block text-sm font-semibold mb-2 text-gray-900">
                   Color *
                 </label>
                 <input
@@ -233,7 +233,7 @@ export default function PopupAdsAdmin() {
                 />
               </div>
 
-              <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-lg">
+              <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-lg text-gray-900">
                 <input
                   type="checkbox"
                   name="isActive"
@@ -241,14 +241,14 @@ export default function PopupAdsAdmin() {
                   onChange={handleInputChange}
                   className="w-5 h-5"
                 />
-                <span>Set as active</span>
+                <span className="text-gray-900">Set as active</span>
               </div>
 
               <div className="flex gap-4 mt-8">
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="flex-1 px-6 py-3 border rounded-lg"
+                  className="flex-1 px-6 py-3 border rounded-lg text-gray-900"
                 >
                   Cancel
                 </button>

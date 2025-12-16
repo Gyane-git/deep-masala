@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { Edit2, Trash2, Info, Plus, Search } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+
 
 const PRODUCT_API = "/api/products";
 const CATEGORY_API = "/api/categories";
@@ -77,16 +79,17 @@ export default function ProductListPage() {
           <h1 className="text-3xl font-bold text-gray-900">Products</h1>
           <p className="text-gray-500 mt-1">Manage your product inventory</p>
         </div>
-        <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-          <Plus size={20} />
-          Add Product
-        </button>
+        <Link href="/admin/add-product" className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+  <Plus size={20} />
+  Add Product
+</Link>
+
       </div>
 
       {/* Filters */}
       <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
         <div className="flex flex-wrap gap-4">
-          <div className="relative flex-1 min-w-[300px]">
+          <div className="relative flex-1 min-w-[300px] text-gray-900 ">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
             <input
               type="text"
@@ -100,7 +103,7 @@ export default function ProductListPage() {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className="px-4 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           >
             <option value="">All Categories</option>
             {categories.map((cat) => (

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Grid, List, Search, ChevronDown } from "lucide-react";
+import { Grid, List, Search, Heart, RotateCcw, ChevronDown } from "lucide-react";
 
 export default function ProductListPage() {
   const [products, setProducts] = useState([]);
@@ -159,21 +159,30 @@ export default function ProductListPage() {
                 }`}
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                {/* Image */}
+                {/* Image Section */}
                 <div
-                  className={`relative overflow-hidden rounded-xl group shadow-md hover:shadow-xl transition-shadow duration-300 ${
-                    viewMode === "list" ? "w-48" : ""
+                  className={`relative overflow-hidden rounded-xl bg-gray-100 flex items-center justify-center ${
+                    viewMode === "list" ? "w-48 h-48 flex-shrink-0" : "h-72 md:h-80"
                   }`}
                 >
                   <img
-                    src={
-                      product.main_image || "https://via.placeholder.com/300"
-                    }
-                    className={`w-full object-contain transition-transform duration-700 ease-in-out group-hover:scale-105 ${
-                      viewMode === "list" ? "h-48" : "h-72 md:h-80"
-                    }`}
+                    src={product.main_image || "https://via.placeholder.com/400x300"}
                     alt={product.product_name}
+                    className="w-full h-full object-contain transition-transform duration-500 ease-in-out group-hover:scale-105"
                   />
+
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-40 transition-opacity duration-500 rounded-xl"></div>
+
+                  {/* Quick Action Buttons */}
+                  <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition">
+                      <Heart size={18} className="text-red-500" />
+                    </button>
+                    <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition">
+                      <RotateCcw size={18} className="text-blue-500" />
+                    </button>
+                  </div>
 
                   {/* Badges */}
                   <div className="absolute top-3 left-3 flex flex-col gap-2">
@@ -182,17 +191,12 @@ export default function ProductListPage() {
                         Discount
                       </span>
                     )}
-
-                    {product.actual_price &&
-                      product.selling_price < product.actual_price && (
-                        <span className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
-                          Sale
-                        </span>
-                      )}
+                    {product.actual_price && product.selling_price < product.actual_price && (
+                      <span className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
+                        Sale
+                      </span>
+                    )}
                   </div>
-
-                  {/* Overlay for hover effect */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-40 transition-opacity duration-500 rounded-xl"></div>
                 </div>
 
                 {/* Content */}
