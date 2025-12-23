@@ -51,7 +51,7 @@ export async function POST(req) {
 
     // File fields
     const productCatalogFile = formData.get("productCatalog");
-    const mainImageFile = formData.get("mainImage");
+    const mainImageFiles = formData.getAll("productImages");
 
     // Prepare directories
     const productsDir = path.join(process.cwd(), "public/upload/products");
@@ -79,18 +79,22 @@ export async function POST(req) {
 
     // Save files (if present)
     let productCatalogPath = null;
-    let mainImagePath = null;
+    let productImages = [];
+
+    if (mainImageFiles && mainImageFiles.length > 0) {
+      for (const file of mainImageFiles) {
+        if (file && file.size) {
+          const savedPath = await saveFile(file, productsDir);
+          productImages.push(savedPath);
+        }
+      }
+    }
 
     if (productCatalogFile && productCatalogFile.size) {
-      // Optionally validate type/size here
       productCatalogPath = await saveFile(productCatalogFile, catalogsDir);
     }
 
-    if (mainImageFile && mainImageFile.size) {
-      // Optionally validate type/size here
-      mainImagePath = await saveFile(mainImageFile, productsDir);
-    }
-
+    const mainImagePath = productImages[0] || null;
     // Insert into DB
     const connection = await db();
 
@@ -100,36 +104,41 @@ export async function POST(req) {
        weekly_product, flash_sale_product, today_deals, special_product,
        actual_price, selling_price, available_quantity, stock_quantity,
        product_description, key_specifications, packaging, warranty,
-       product_catalog, main_image)
+       product_catalog, main_image, product_images)
       VALUES (?, ?, ?, ?, ?, ?, ?,
               ?, ?, ?, ?,
               ?, ?, ?, ?,
               ?, ?, ?, ?,
-              ?, ?)
+              ?, ?, ?)
     `;
 
     const params = [
-      productCode,
-      productName,
-      categories,
-      category_id,
-      brand,
-      deliveryTargetDays || null,
-      weeklyProduct,
-      flashSaleProduct,
-      todayDeals,
-      specialProduct,
-      size,
-      actualPrice || null,
-      sellingPrice || null,
-      availableQuantity || null,
-      stockQuantity || null,
-      productDescription,
-      keySpecifications,
-      packaging,
-      warranty,
-      productCatalogPath,
-      mainImagePath,
+      productCode, // product_code
+      productName, // product_name
+      categories, // categories
+      category_id, // category_id
+      brand, // brand
+      deliveryTargetDays, // delivery_target_days
+      size, // size ✅ FIXED
+
+      weeklyProduct, // weekly_product
+      flashSaleProduct, // flash_sale_product
+      todayDeals, // today_deals
+      specialProduct, // special_product
+
+      actualPrice, // actual_price
+      sellingPrice, // selling_price
+      availableQuantity, // available_quantity
+      stockQuantity, // stock_quantity
+
+      productDescription, // product_description
+      keySpecifications, // key_specifications
+      packaging, // packaging
+      warranty, // warranty
+
+      productCatalogPath, // product_catalog
+      mainImagePath, // main_image
+      JSON.stringify(productImages), // product_images
     ];
 
     const [result] = await connection.execute(insertSQL, params);
@@ -150,12 +159,15 @@ export async function POST(req) {
   } catch (err) {
     console.error("POST /api/products error:", err);
     return new Response(
-      JSON.stringify({ success: false, message: "Server error", error: err.message }),
+      JSON.stringify({
+        success: false,
+        message: "Server error",
+        error: err.message,
+      }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 }
-
 
 // inside app/api/products/route.js add:
 export async function GET() {
@@ -167,9 +179,13 @@ export async function GET() {
        FROM products ORDER BY id DESC`
     );
     await connection.end();
-    return new Response(JSON.stringify({ success: true, products: rows }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, products: rows }), {
+      status: 200,
+    });
   } catch (err) {
-    return new Response(JSON.stringify({ success: false, message: err.message }), { status: 500 });
+    return new Response(
+      JSON.stringify({ success: false, message: err.message }),
+      { status: 500 }
+    );
   }
 }
-
