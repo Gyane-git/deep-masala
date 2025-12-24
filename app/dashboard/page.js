@@ -25,6 +25,8 @@ export default function HomePage() {
     fetchBanners();
   }, []);
 
+  
+
   // Auto-slide functionality
   useEffect(() => {
     if (slides.length === 0) return;
